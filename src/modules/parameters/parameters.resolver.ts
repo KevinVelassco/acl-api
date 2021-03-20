@@ -40,4 +40,9 @@ export class ParametersResolver {
       updateParameterInput
     );
   }
+
+  @Mutation(() => Parameter, { name: 'removeParameter' })
+  remove (@Args('findOneParameterInput') findOneParameterInput: FindOneParameterInput): Promise<Parameter> {
+    return this.service.remove(findOneParameterInput);
+  }
 }
