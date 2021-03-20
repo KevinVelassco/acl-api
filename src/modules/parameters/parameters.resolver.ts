@@ -8,6 +8,7 @@ import { ParametersService } from './parameters.service';
 import { CreateParameterInput } from './dto/create-parameter-input.dto';
 import { FindAllParametersInput } from './dto/find-all-parameters-input.dto';
 import { FindOneParameterInput } from './dto/find-one-parameter-input.dto';
+import { UpdateParameterInput } from './dto/update-parameter-input.dto';
 
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @Resolver(() => Parameter)
@@ -27,5 +28,16 @@ export class ParametersResolver {
   @Query(() => Parameter, { name: 'parameter', nullable: true })
   findOne (@Args('findOneParameterInput') findOneParameterInput: FindOneParameterInput): Promise<Parameter | null> {
     return this.service.findOne(findOneParameterInput);
+  }
+
+  @Mutation(() => Parameter, { name: 'updateParameter' })
+  update (
+    @Args('findOneParameterInput') findOneParameterInput: FindOneParameterInput,
+    @Args('updateParameterInput') updateParameterInput: UpdateParameterInput
+  ): Promise<Parameter> {
+    return this.service.update(
+      findOneParameterInput,
+      updateParameterInput
+    );
   }
 }
