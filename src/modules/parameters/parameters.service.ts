@@ -7,6 +7,7 @@ import { Parameter } from './entities/parameter.entity';
 
 import { CreateParameterInput } from './dto/create-parameter-input.dto';
 import { FindAllParametersInput } from './dto/find-all-parameters-input.dto';
+import { FindOneParameterInput } from './dto/find-one-parameter-input.dto';
 import { GetParameterValueInput } from './dto/get-parameter-value-input.dto';
 
 @Injectable()
@@ -56,6 +57,14 @@ export class ParametersService {
     const items = await query.getMany();
 
     return items;
+  }
+
+  async findOne (findOneParameterInput: FindOneParameterInput): Promise<Parameter | null> {
+    const { id } = findOneParameterInput;
+
+    const item = await this.parameterRepository.findOne(id);
+
+    return item || null;
   }
 
   public async getValue (getParameterValueInput: GetParameterValueInput): Promise<string | null> {
