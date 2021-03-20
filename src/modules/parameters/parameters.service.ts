@@ -8,6 +8,7 @@ import { Parameter } from './entities/parameter.entity';
 import { CreateParameterInput } from './dto/create-parameter-input.dto';
 import { FindAllParametersInput } from './dto/find-all-parameters-input.dto';
 import { FindOneParameterInput } from './dto/find-one-parameter-input.dto';
+import { UpdateParameterInput } from './dto/update-parameter-input.dto';
 import { GetParameterValueInput } from './dto/get-parameter-value-input.dto';
 
 @Injectable()
@@ -65,6 +66,42 @@ export class ParametersService {
     const item = await this.parameterRepository.findOne(id);
 
     return item || null;
+  }
+
+  public async update (findOneParameterInput: FindOneParameterInput, updateParameterInput: UpdateParameterInput): Promise<Parameter> {
+    const { id } = findOneParameterInput;
+
+    const existing = await this.findOne(findOneParameterInput);
+
+    if (!existing) {
+      throw new NotFoundException(`can't get the parameter with id ${id}.`);
+    }
+
+    let { name } = updateParameterInput;
+
+    if (name) {
+      name = name
+        .trim()
+        .toUpperCase()
+        .split(' ')
+        .join('_');
+
+      const existing = await this.getValue({ checkExisting: false, name });
+
+      if (existing) {
+        throw new PreconditionFailedException(`parameter with the name ${name} already exists`);
+      }
+    }
+
+    const preloaded = await this.parameterRepository.preload({
+      id: existing.id,
+      ...updateParameterInput,
+      name
+    });
+
+    const saved = await this.parameterRepository.save(preloaded);
+
+    return saved;
   }
 
   public async getValue (getParameterValueInput: GetParameterValueInput): Promise<string | null> {
