@@ -104,6 +104,22 @@ export class ParametersService {
     return saved;
   }
 
+  public async remove (findOneParameterInput: FindOneParameterInput): Promise<Parameter> {
+    const { id } = findOneParameterInput;
+
+    const existing = await this.findOne(findOneParameterInput);
+
+    if (!existing) {
+      throw new NotFoundException(`can't get the parameter with id ${id}.`);
+    }
+
+    const clone = { ...existing };
+
+    await this.parameterRepository.remove(existing);
+
+    return clone;
+  }
+
   public async getValue (getParameterValueInput: GetParameterValueInput): Promise<string | null> {
     const { name, checkExisting } = getParameterValueInput;
 
