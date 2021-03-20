@@ -2,9 +2,12 @@ import * as path from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+import { ParametersModule } from './modules/parameters/parameters.module';
 
 import appConfig from './config/app.config';
 import appConfigSchema from './config/app.config.schema';
@@ -20,6 +23,12 @@ const envPath = path.resolve(__dirname, `../.env.${NODE_ENV}`);
       validationSchema: appConfigSchema
     }),
 
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      playground: true,
+      introspection: true
+    }),
+
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
@@ -32,7 +41,9 @@ const envPath = path.resolve(__dirname, `../.env.${NODE_ENV}`);
         synchronize: process.env.NODE_ENV !== 'production',
         logging: true
       })
-    })
+    }),
+
+    ParametersModule
   ],
   controllers: [AppController],
   providers: [AppService]
