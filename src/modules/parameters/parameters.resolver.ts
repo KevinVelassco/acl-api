@@ -7,6 +7,7 @@ import { ParametersService } from './parameters.service';
 
 import { CreateParameterInput } from './dto/create-parameter-input.dto';
 import { FindAllParametersInput } from './dto/find-all-parameters-input.dto';
+import { FindOneParameterInput } from './dto/find-one-parameter-input.dto';
 
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @Resolver(() => Parameter)
@@ -21,5 +22,10 @@ export class ParametersResolver {
   @Query(() => [Parameter], { name: 'parameters' })
   findAll (@Args('findAllParametersInput') findAllParametersInput: FindAllParametersInput): Promise<Parameter[]> {
     return this.service.findAll(findAllParametersInput);
+  }
+
+  @Query(() => Parameter, { name: 'parameter', nullable: true })
+  findOne (@Args('findOneParameterInput') findOneParameterInput: FindOneParameterInput): Promise<Parameter | null> {
+    return this.service.findOne(findOneParameterInput);
   }
 }
