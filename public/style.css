@@ -1,0 +1,70 @@
+body {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    background: #1b1b1b;
+    color: #fff;
+    font-family: 'Montserrat', 'Tahoma', 'sans-serif';
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 50px;
+}
+
+.btn {
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    padding: 14px 28px;
+    min-width: 230px;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    transition: all .1s ease-in;
+    -moz-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #ea2845;
+    border: 2px solid #ea2845;
+    color: #fff;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    border: 2px solid #e93333;
+    background: 0 0;
+    color: #fff;
+}
+
+.btn-secondary {
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.svg-inline--fa {
+    display: inline-block;
+    font-size: inherit;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -.125em;
+}
+
+.fa-github {
+    margin-right: 6px;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.btn-secondary:hover {
+    border: 2px solid #e92845;
+    background: 0 0;
+    color: #e92845;
+}

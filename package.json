@@ -32,6 +32,7 @@
     "class-validator": "0.13.1",
     "graphql": "15.5.0",
     "graphql-tools": "7.0.4",
+    "hbs": "^4.1.1",
     "joi": "17.4.0",
     "pg": "8.5.1",
     "reflect-metadata": "0.1.13",
