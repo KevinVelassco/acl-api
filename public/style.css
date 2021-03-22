@@ -1,52 +1,85 @@
+:root {
+    --selection-text: #ffffff;
+    --selection-background: rgb(32, 35, 41);
+
+    --btn-primary: #ea2845;
+    --btn-text-color: #ffffff;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
-    background: #1b1b1b;
-    color: #fff;
+    background: var(--selection-background);
+    color: var(--selection-text);
     font-family: 'Montserrat', 'Tahoma', 'sans-serif';
 }
 
-h1 {
+.main {
+    display: flex;
+    flex-flow: column wrap;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.header__title {
+    text-align: center;
     font-weight: 700;
     font-size: 50px;
 }
 
-.btn {
+.items {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.item {
     font-weight: 500;
     font-size: 16px;
-    color: #fff;
+    color: var(--btn-text-color);
     text-align: center;
     padding: 14px 28px;
-    min-width: 230px;
+    width: 220px;
     border-radius: 30px;
     -webkit-border-radius: 30px;
     transition: all .1s ease-in;
     -moz-transition: all .1s ease-in;
     -webkit-transition: all .1s ease-in;
     text-decoration: none;
+    margin: 8px;
 }
 
-.btn-primary {
-    background: #ea2845;
-    border: 2px solid #ea2845;
-    color: #fff;
+.item-primary {
+    background: var(--btn-primary);
+    border: 2px solid var(--btn-primary);
 }
 
-.d-inline-block {
-    display: inline-block;
-}
-
-.btn-primary:hover {
+.item-primary:hover {
     border: 2px solid #e93333;
     background: 0 0;
-    color: #fff;
 }
 
-.btn-secondary {
+.item-secondary {
     border: 2px solid #fff;
-    color: #fff;
+}
+
+.item-secondary:hover {
+    border: 2px solid #e92845;
+    background: 0 0;
+    color: #e92845;
 }
 
 .svg-inline--fa {
@@ -61,10 +94,4 @@ h1 {
     margin-right: 6px;
     font-size: 18px;
     vertical-align: middle;
-}
-
-.btn-secondary:hover {
-    border: 2px solid #e92845;
-    background: 0 0;
-    color: #e92845;
 }
