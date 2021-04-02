@@ -1,7 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+
+import { Company } from '../../companies/entities/company.entity';
 
 @Entity('roles')
+@Unique('uq_roles_code-company', ['code', 'company'])
+@Unique('uq_roles_name-company', ['name', 'company'])
 @ObjectType()
 export class Role {
   /*
@@ -38,4 +42,10 @@ export class Role {
   @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // relations
+
+  @ManyToOne(() => Company, (company: Company) => company.roles)
+  @JoinColumn({ name: 'company_id' })
+  company: Company;
 }
