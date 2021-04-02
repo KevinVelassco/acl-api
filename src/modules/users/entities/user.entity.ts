@@ -1,7 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
+@Unique('uq_users_auth_uid', ['authUid'])
+@Unique('uq_users_email', ['email'])
 @ObjectType()
 export class User {
     /*
@@ -16,7 +18,7 @@ export class User {
      */
     @Field(() => String)
     @Index('idx_auth_uid')
-    @Column({ name: 'auth_uid', type: 'varchar', length: 100, unique: true })
+    @Column({ name: 'auth_uid', type: 'varchar', length: 100 })
     authUid: string;
 
     /*
@@ -24,7 +26,7 @@ export class User {
      */
     @Field(() => String)
     @Index('idx_email')
-    @Column({ type: 'varchar', length: 100, unique: true })
+    @Column({ type: 'varchar', length: 100 })
     email: string;
 
     /*
