@@ -14,35 +14,35 @@ export class Parameter {
   /*
    * Nombre del parámetro
    */
-  @Field()
+  @Field(() => String)
   @Column({ type: 'varchar', length: 100, unique: true })
   name: string;
 
   /*
    * Valor del parámetro
    */
-  @Field()
+  @Field(() => String)
   @Column({ type: 'varchar', length: 200 })
   value: string;
 
   /*
    * Descripcón del parámetro
    */
-  @Field()
+  @Field(() => String)
   @Column({ type: 'varchar', length: 300 })
   description: string;
 
   /*
    * fecha cuando se realizó el registro
    */
-  @Field()
+  @Field(() => Date)
   @CreateDateColumn()
   createdAt: Date;
 
   /*
    * fecha cuando se actualiza el registro
    */
-  @Field()
+  @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Date;
 }
