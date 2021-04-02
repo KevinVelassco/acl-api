@@ -16,6 +16,7 @@ export class Company {
   /*
    *  UUID del company
    */
+  @Field(() => String)
   @Column({ type: 'varchar', length: 21 })
   uuid: string;
 
