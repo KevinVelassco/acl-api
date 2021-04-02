@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { ParametersModule } from './modules/parameters/parameters.module';
+import { UsersModule } from './modules/users/users.module';
 
 import appConfig from './config/app.config';
 import appConfigSchema from './config/app.config.schema';
@@ -43,7 +44,8 @@ const envPath = path.resolve(__dirname, `../.env.${NODE_ENV}`);
       })
     }),
 
-    ParametersModule
+    ParametersModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService]
