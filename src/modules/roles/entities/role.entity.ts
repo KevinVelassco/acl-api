@@ -1,31 +1,29 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('companies')
-@Unique('uq_companies_uuid', ['uuid'])
-@Unique('uq_companies_name', ['name'])
+@Entity('roles')
 @ObjectType()
-export class Company {
+export class Role {
   /*
-   * ID del company
+   * ID del rol
    */
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
   /*
-   *  UUID del company
+   * Código del rol
    */
   @Field(() => String)
-  @Column({ type: 'varchar', length: 21 })
-  uuid: string;
+  @Column({ type: 'varchar', length: 5 })
+  code: string;
 
   /*
-   * Nombre del company
+   * Nombre del rol
    */
   @Field(() => String)
   @Column({ type: 'varchar', length: 100 })
-  name: string;
+  name: string
 
   /*
    * Fecha cuando se realizó el registro
