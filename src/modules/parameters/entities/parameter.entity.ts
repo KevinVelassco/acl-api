@@ -1,7 +1,8 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 @Entity('parameters')
+@Unique('uq_parameters_name', ['name'])
 @ObjectType()
 export class Parameter {
   /*
@@ -15,7 +16,7 @@ export class Parameter {
    * Nombre del parámetro
    */
   @Field(() => String)
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100 })
   name: string;
 
   /*
