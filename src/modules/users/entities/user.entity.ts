@@ -1,7 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 import { AssignedRole } from '../../assigned-roles/entities/assigned-role.entity';
+import { Company } from '../../companies/entities/company.entity';
 
 @Entity('users')
 @Unique('uq_users_auth_uid', ['authUid'])
@@ -57,4 +58,9 @@ export class User {
   @Field(() => [AssignedRole])
   @OneToMany(() => AssignedRole, (assignedRole: AssignedRole) => assignedRole.user)
   assignedRoles: AssignedRole[];
+
+  @Field(() => Company)
+  @ManyToOne(() => Company, (company: Company) => company.users)
+  @JoinColumn({ name: 'company_id' })
+  company: Company;
 }
