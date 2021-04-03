@@ -44,6 +44,7 @@ export class Company {
 
   // ralations
 
+  @Field(() => [Role])
   @OneToMany(() => Role, (role: Role) => role.company)
   roles: Role[];
 }

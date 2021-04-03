@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
+import { Role } from '../../roles/entities/role.entity';
 @Entity('assigned_roles')
 @ObjectType()
 export class AssignedRole {
@@ -24,4 +25,11 @@ export class AssignedRole {
   @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // relations
+
+  @Field(() => Role)
+  @ManyToOne(() => Role, (role: Role) => role.assignedRoles)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 }
