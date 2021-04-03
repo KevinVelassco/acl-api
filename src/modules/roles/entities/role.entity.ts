@@ -1,7 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 import { Company } from '../../companies/entities/company.entity';
+import { AssignedRole } from '../../assigned-roles/entities/assigned-role.entity';
 
 @Entity('roles')
 @Unique('uq_roles_code-company', ['code', 'company'])
@@ -45,7 +46,12 @@ export class Role {
 
   // relations
 
+  @Field(() => Company)
   @ManyToOne(() => Company, (company: Company) => company.roles)
   @JoinColumn({ name: 'company_id' })
   company: Company;
+
+  @Field(() => [AssignedRole])
+  @OneToMany(() => AssignedRole, (assignedRole : AssignedRole) => assignedRole.role)
+  assignedRoles: AssignedRole[];
 }
