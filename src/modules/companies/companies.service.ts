@@ -8,6 +8,7 @@ import { generateUuid } from '../../utils';
 import { Company } from './entities/company.entity';
 
 import { CreateCompanyInput } from './dto/create-company-input.dto';
+import { FindAllCompaniesInput } from './dto/find-all-companies-input.dto';
 
 @Injectable()
 export class CompaniesService {
@@ -25,5 +26,23 @@ export class CompaniesService {
     const saved = await this.companyRepository.save(created);
 
     return saved;
+  }
+
+  public async findAll (findAllCompaniesInput: FindAllCompaniesInput): Promise<Company[]> {
+    const { limit, skip, search } = findAllCompaniesInput;
+
+    const query = this.companyRepository.createQueryBuilder('c');
+
+    if (search) {
+      query.where('c.name ilike :search', { search: `%${search}%` });
+    }
+
+    query.limit(limit || undefined)
+      .offset(skip || 0)
+      .orderBy('c.id', 'DESC');
+
+    const items = await query.getMany();
+
+    return items;
   }
 }
