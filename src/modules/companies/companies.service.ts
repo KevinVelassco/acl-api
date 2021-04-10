@@ -76,4 +76,20 @@ export class CompaniesService {
 
     return save;
   }
+
+  public async remove (findOneCompanyInput: FindOneCompanyInput): Promise<Company> {
+    const { companyUuid } = findOneCompanyInput;
+
+    const existing = await this.findOne({ companyUuid });
+
+    if (!existing) {
+      throw new NotFoundException(`can't get the company with uuid ${companyUuid}.`);
+    }
+
+    const clone = { ...existing };
+
+    await this.companyRepository.remove(existing);
+
+    return clone;
+  }
 }

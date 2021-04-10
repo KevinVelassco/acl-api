@@ -43,4 +43,10 @@ export class CompaniesResolver {
   ): Promise<Company> {
     return this.service.update(findOneInput, updateCompanyInput);
   }
+
+  @Mutation(() => Company)
+  removeCompany (@Args('findOneCompanyInput') findOneCompanyInput: FindOneCompanyInput
+  ): Promise<Company> {
+    return this.service.remove(findOneCompanyInput);
+  }
 }
