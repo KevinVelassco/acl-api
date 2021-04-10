@@ -9,6 +9,7 @@ import { Company } from './entities/company.entity';
 
 import { CreateCompanyInput } from './dto/create-company-input.dto';
 import { FindAllCompaniesInput } from './dto/find-all-companies-input.dto';
+import { FindOneCompanyInput } from './dto/find-one-company-input.dto';
 
 @Injectable()
 export class CompaniesService {
@@ -44,5 +45,15 @@ export class CompaniesService {
     const items = await query.getMany();
 
     return items;
+  }
+
+  public async findOne (findOneCompanyInput: FindOneCompanyInput): Promise<Company | null> {
+    const { companyUuid } = findOneCompanyInput;
+
+    const item = await this.companyRepository.createQueryBuilder('c')
+      .where('c.uuid = :companyUuid', { companyUuid })
+      .getOne();
+
+    return item || null;
   }
 }
