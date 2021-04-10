@@ -8,6 +8,7 @@ import { CompaniesService } from './companies.service';
 import { CreateCompanyInput } from './dto/create-company-input.dto';
 import { FindAllCompaniesInput } from './dto/find-all-companies-input.dto';
 import { FindOneCompanyInput } from './dto/find-one-company-input.dto';
+import { UpdateCompanyInput } from './dto/update-company-input.dto';
 
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @Resolver(() => Company)
@@ -33,5 +34,13 @@ export class CompaniesResolver {
   findOne (@Args('findOneCompanyInput') findOneCompanyInput: FindOneCompanyInput
   ): Promise<Company | null> {
     return this.service.findOne(findOneCompanyInput);
+  }
+
+  @Mutation(() => Company, { name: 'updateCompany' })
+  update (
+    @Args('findOneCompanyInput') findOneInput: FindOneCompanyInput,
+    @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput
+  ): Promise<Company> {
+    return this.service.update(findOneInput, updateCompanyInput);
   }
 }
