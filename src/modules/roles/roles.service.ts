@@ -8,6 +8,7 @@ import { Role } from './entities/role.entity';
 import { CompaniesService } from '../companies/companies.service';
 
 import { CreateRoleInput } from './dto/create-role-input.dto';
+import { FindAllRolesInput } from './dto/find-all-roles-input.dto';
 
 @Injectable()
 export class RolesService {
@@ -56,5 +57,26 @@ export class RolesService {
     const saved = await this.roleRepository.save(created);
 
     return saved;
+  }
+
+  public async findAll (findAllRolesInput: FindAllRolesInput): Promise<Role[]> {
+    const { companyUuid, limit, skip, search } = findAllRolesInput;
+
+    const query = this.roleRepository.createQueryBuilder('r')
+      .loadAllRelationIds()
+      .innerJoin('r.company', 'c')
+      .where('c.uuid = :companyUuid', { companyUuid });
+
+    if (search) {
+      query.andWhere('r.name ilike :search', { search: `%${search}%` });
+    }
+
+    query.limit(limit || undefined)
+      .offset(skip || 0)
+      .orderBy('r.id', 'DESC');
+
+    const items = await query.getMany();
+
+    return items;
   }
 }
