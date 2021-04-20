@@ -7,6 +7,7 @@ import { RolesService } from './roles.service';
 
 import { CreateRoleInput } from './dto/create-role-input.dto';
 import { FindAllRolesInput } from './dto/find-all-roles-input.dto';
+import { FindOneRoleInput } from './dto/find-one-role-input.dto';
 
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @Resolver(() => Role)
@@ -25,5 +26,11 @@ export class RolesResolver {
   findAll (@Args('findAllRolesInput') findAllRolesInput: FindAllRolesInput
   ): Promise<Role[]> {
     return this.service.findAll(findAllRolesInput);
+  }
+
+  @Query(() => Role, { name: 'role', nullable: true })
+  findOne (@Args('findOneRoleInput') findOneRoleInput: FindOneRoleInput
+  ): Promise<Role | null> {
+    return this.service.findOne(findOneRoleInput);
   }
 }

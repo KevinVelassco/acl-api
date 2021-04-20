@@ -9,6 +9,7 @@ import { CompaniesService } from '../companies/companies.service';
 
 import { CreateRoleInput } from './dto/create-role-input.dto';
 import { FindAllRolesInput } from './dto/find-all-roles-input.dto';
+import { FindOneRoleInput } from './dto/find-one-role-input.dto';
 
 @Injectable()
 export class RolesService {
@@ -78,5 +79,18 @@ export class RolesService {
     const items = await query.getMany();
 
     return items;
+  }
+
+  public async findOne (findOneRoleInput: FindOneRoleInput): Promise<Role | null> {
+    const { companyUuid, id } = findOneRoleInput;
+
+    const item = await this.roleRepository.createQueryBuilder('r')
+      .loadAllRelationIds()
+      .innerJoin('r.company', 'c')
+      .where('c.uuid = :companyUuid', { companyUuid })
+      .andWhere('r.id = :id', { id })
+      .getOne();
+
+    return item || null;
   }
 }
