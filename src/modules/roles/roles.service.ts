@@ -147,4 +147,20 @@ export class RolesService {
 
     return saved;
   }
+
+  public async remove (findOneRoleInput: FindOneRoleInput): Promise<Role> {
+    const { companyUuid, id } = findOneRoleInput;
+
+    const existing = await this.findOne(findOneRoleInput);
+
+    if (!existing) {
+      throw new PreconditionFailedException(`can't get the role ${id} for the company with uuid ${companyUuid}.`);
+    }
+
+    const clone = { ...existing };
+
+    await this.roleRepository.remove(existing);
+
+    return clone;
+  }
 }
