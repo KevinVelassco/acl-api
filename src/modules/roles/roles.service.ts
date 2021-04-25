@@ -10,6 +10,7 @@ import { CompaniesService } from '../companies/companies.service';
 import { CreateRoleInput } from './dto/create-role-input.dto';
 import { FindAllRolesInput } from './dto/find-all-roles-input.dto';
 import { FindOneRoleInput } from './dto/find-one-role-input.dto';
+import { UpdateRoleInput } from './dto/update-role-input.dto';
 
 @Injectable()
 export class RolesService {
@@ -92,5 +93,58 @@ export class RolesService {
       .getOne();
 
     return item || null;
+  }
+
+  public async Update (findOneRoleInput: FindOneRoleInput, updateRoleInput: UpdateRoleInput): Promise<Role> {
+    const { companyUuid, id } = findOneRoleInput;
+
+    const company = await this.companiesService.findOne({ companyUuid });
+
+    if (!company) {
+      throw new NotFoundException(`can't get the company with uuid ${companyUuid}.`);
+    }
+
+    const existing = await this.findOne(findOneRoleInput);
+
+    if (!existing) {
+      throw new PreconditionFailedException(`can't get the role ${id} for the company with uuid ${companyUuid}.`);
+    }
+
+    const { code, name } = updateRoleInput;
+
+    if (code) {
+      const existing = await this.roleRepository.findOne({
+        where: {
+          code,
+          company
+        }
+      });
+
+      if (existing) {
+        throw new PreconditionFailedException(`already exists a role for the company ${companyUuid} and code ${code}.`);
+      }
+    }
+
+    if (name) {
+      const existing = await this.roleRepository.findOne({
+        where: {
+          name,
+          company
+        }
+      });
+
+      if (existing) {
+        throw new PreconditionFailedException(`already exists a role for the company ${companyUuid} and name ${name}.`);
+      }
+    }
+
+    const preloaded = await this.roleRepository.preload({
+      id: existing.id,
+      ...updateRoleInput
+    });
+
+    const saved = await this.roleRepository.save(preloaded);
+
+    return saved;
   }
 }

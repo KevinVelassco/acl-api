@@ -8,6 +8,7 @@ import { RolesService } from './roles.service';
 import { CreateRoleInput } from './dto/create-role-input.dto';
 import { FindAllRolesInput } from './dto/find-all-roles-input.dto';
 import { FindOneRoleInput } from './dto/find-one-role-input.dto';
+import { UpdateRoleInput } from './dto/update-role-input.dto';
 
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @Resolver(() => Role)
@@ -32,5 +33,13 @@ export class RolesResolver {
   findOne (@Args('findOneRoleInput') findOneRoleInput: FindOneRoleInput
   ): Promise<Role | null> {
     return this.service.findOne(findOneRoleInput);
+  }
+
+  @Mutation(() => Role, { name: 'updateRole' })
+  update (
+    @Args('findOneRoleInput') findOneRoleInput: FindOneRoleInput,
+    @Args('updateRoleInput') updateRoleInput: UpdateRoleInput
+  ): Promise<Role> {
+    return this.service.Update(findOneRoleInput, updateRoleInput);
   }
 }
