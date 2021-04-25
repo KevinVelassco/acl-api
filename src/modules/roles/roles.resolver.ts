@@ -42,4 +42,10 @@ export class RolesResolver {
   ): Promise<Role> {
     return this.service.Update(findOneRoleInput, updateRoleInput);
   }
+
+  @Mutation(() => Role, { name: 'removeRole' })
+  remove (@Args('findOneRoleInput') findOneRoleInput: FindOneRoleInput
+  ): Promise<Role> {
+    return this.service.remove(findOneRoleInput);
+  }
 }
