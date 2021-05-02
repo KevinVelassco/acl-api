@@ -11,6 +11,7 @@ import { CompaniesService } from '../companies/companies.service';
 
 import { CreateUserInput } from './dto/create-user-input.dto';
 import { FindAllUsersInput } from './dto/find-all-users-input.dto';
+import { FindOneUserInput } from './dto/find-one-user-input.dto';
 
 @Injectable()
 export class UsersService {
@@ -59,5 +60,18 @@ export class UsersService {
     const items = await query.getMany();
 
     return items;
+  }
+
+  public async findOne (findOneUserInput: FindOneUserInput): Promise<User | null> {
+    const { companyUuid, id } = findOneUserInput;
+
+    const item = await this.userRepository.createQueryBuilder('u')
+      .loadAllRelationIds()
+      .innerJoin('u.company', 'c')
+      .where('c.uuid = :companyUuid', { companyUuid })
+      .andWhere('u.id = :id', { id })
+      .getOne();
+
+    return item || null;
   }
 }
