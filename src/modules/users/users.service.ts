@@ -32,6 +32,7 @@ export class UsersService {
 
     const created = this.userRepository.create({
       ...createUserInput,
+      isAdmin: false,
       authUid: generateUuid(21),
       company
     });
