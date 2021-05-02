@@ -33,4 +33,10 @@ export class UsersResolver {
   ): Promise<User | null> {
     return this.service.findOne(findOneUserInput);
   }
+
+  @Mutation(() => User, { name: 'removeUser' })
+  remove (@Args('findOneUserInput') findOneUserInput: FindOneUserInput
+  ): Promise<User> {
+    return this.service.remove(findOneUserInput);
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, PreconditionFailedException } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -73,5 +73,27 @@ export class UsersService {
       .getOne();
 
     return item || null;
+  }
+
+  public async remove (findOneUserInput: FindOneUserInput): Promise<User> {
+    const { companyUuid, id } = findOneUserInput;
+
+    const existing = await this.findOne(findOneUserInput);
+
+    if (!existing) {
+      throw new PreconditionFailedException(`can't get the user ${id} for the company with uuid ${companyUuid}.`);
+    }
+
+    const { isAdmin } = existing;
+
+    if (isAdmin) {
+      throw new PreconditionFailedException('can\'t remove an admin user.');
+    }
+
+    const clone = { ...existing };
+
+    await this.userRepository.remove(existing);
+
+    return clone;
   }
 }
