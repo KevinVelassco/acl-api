@@ -26,12 +26,23 @@ export class UsersService {
   ) {}
 
   public async create (createUserInput: CreateUserInput): Promise<User> {
-    const { companyUuid } = createUserInput;
+    const { companyUuid, email } = createUserInput;
 
     const company = await this.companiesService.findOne({ companyUuid });
 
     if (!company) {
       throw new NotFoundException(`can't get the company with uuid ${companyUuid}.`);
+    }
+
+    const existing = await this.userRepository.findOne({
+      where: {
+        email,
+        company
+      }
+    });
+
+    if (existing) {
+      throw new PreconditionFailedException(`already exists a user with email ${email} for the company with uuid ${companyUuid}.`);
     }
 
     const authUid = generateUuid(21);
@@ -112,7 +123,7 @@ export class UsersService {
     const existing = await this.findOne(findOneUserInput);
 
     if (!existing) {
-      throw new PreconditionFailedException(`can't get the user ${id} for the company with uuid ${companyUuid}.`);
+      throw new NotFoundException(`can't get the user ${id} for the company with uuid ${companyUuid}.`);
     }
 
     const { isAdmin } = existing;
