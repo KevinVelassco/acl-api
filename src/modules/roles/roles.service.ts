@@ -11,6 +11,7 @@ import { CreateRoleInput } from './dto/create-role-input.dto';
 import { FindAllRolesInput } from './dto/find-all-roles-input.dto';
 import { FindOneRoleInput } from './dto/find-one-role-input.dto';
 import { UpdateRoleInput } from './dto/update-role-input.dto';
+import { GetCompanyRoleByCodeInput } from './dto/get-company-role-by-code-input.dto';
 
 @Injectable()
 export class RolesService {
@@ -162,5 +163,17 @@ export class RolesService {
     await this.roleRepository.remove(existing);
 
     return clone;
+  }
+
+  public async getCompanyRoleByCode (getCompanyRoleByCodeInput: GetCompanyRoleByCodeInput): Promise<Role | null> {
+    const { companyUuid, code } = getCompanyRoleByCodeInput;
+
+    const role = await this.roleRepository.createQueryBuilder('u')
+      .innerJoin('u.company', 'c')
+      .where('c.uuid = :companyUuid', { companyUuid })
+      .andWhere('u.code = :code', { code })
+      .getOne();
+
+    return role || null;
   }
 }
