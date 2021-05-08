@@ -38,7 +38,7 @@ export class RolesService {
     });
 
     if (existing) {
-      throw new PreconditionFailedException(`already exists a role for the company ${companyUuid} and code ${code}.`);
+      throw new PreconditionFailedException(`already exists a role with code ${code} for the company with uuid ${companyUuid}.`);
     }
 
     existing = await this.roleRepository.findOne({
@@ -49,7 +49,7 @@ export class RolesService {
     });
 
     if (existing) {
-      throw new PreconditionFailedException(`already exists a role for the company ${companyUuid} and name ${name}.`);
+      throw new PreconditionFailedException(`already exists a role with name ${name} for the company with uuid ${companyUuid}.`);
     }
 
     const created = this.roleRepository.create({
@@ -108,7 +108,7 @@ export class RolesService {
     const existing = await this.findOne(findOneRoleInput);
 
     if (!existing) {
-      throw new PreconditionFailedException(`can't get the role ${id} for the company with uuid ${companyUuid}.`);
+      throw new NotFoundException(`can't get the role ${id} for the company with uuid ${companyUuid}.`);
     }
 
     const { code, name } = updateRoleInput;
@@ -122,7 +122,7 @@ export class RolesService {
       });
 
       if (existing) {
-        throw new PreconditionFailedException(`already exists a role for the company ${companyUuid} and code ${code}.`);
+        throw new PreconditionFailedException(`already exists a role with code ${code} for the company with uuid ${companyUuid}.`);
       }
     }
 
@@ -135,7 +135,7 @@ export class RolesService {
       });
 
       if (existing) {
-        throw new PreconditionFailedException(`already exists a role for the company ${companyUuid} and name ${name}.`);
+        throw new PreconditionFailedException(`already exists a role with name ${name} for the company with uuid ${companyUuid}.`);
       }
     }
 
@@ -155,7 +155,7 @@ export class RolesService {
     const existing = await this.findOne(findOneRoleInput);
 
     if (!existing) {
-      throw new PreconditionFailedException(`can't get the role ${id} for the company with uuid ${companyUuid}.`);
+      throw new NotFoundException(`can't get the role ${id} for the company with uuid ${companyUuid}.`);
     }
 
     const clone = { ...existing };
