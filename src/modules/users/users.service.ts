@@ -1,13 +1,14 @@
-import { Injectable, NotFoundException, PreconditionFailedException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException, PreconditionFailedException } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 
 import { generateUuid } from '../../utils';
 
 import { User } from './entities/user.entity';
 
 import { CompaniesService } from '../companies/companies.service';
+import { AssignedRolesService } from '../assigned-roles/assigned-roles.service';
 
 import { CreateUserInput } from './dto/create-user-input.dto';
 import { FindAllUsersInput } from './dto/find-all-users-input.dto';
@@ -18,7 +19,10 @@ export class UsersService {
   constructor (
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly companiesService: CompaniesService
+    private connection: Connection,
+    private readonly companiesService: CompaniesService,
+    @Inject(forwardRef(() => AssignedRolesService))
+    private readonly assignedRolesService: AssignedRolesService
   ) {}
 
   public async create (createUserInput: CreateUserInput): Promise<User> {
@@ -30,16 +34,42 @@ export class UsersService {
       throw new NotFoundException(`can't get the company with uuid ${companyUuid}.`);
     }
 
+    const authUid = generateUuid(21);
+
     const created = this.userRepository.create({
       ...createUserInput,
       isAdmin: false,
-      authUid: generateUuid(21),
+      authUid,
       company
     });
 
-    const saved = await this.userRepository.save(created);
+    const queryRunner = this.connection.createQueryRunner();
 
-    return saved;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const saved = await queryRunner.manager.save(created);
+
+      const { roleCode } = createUserInput;
+
+      if (roleCode) {
+        await this.assignedRolesService.assignRoleFromRoleCode({
+          companyUuid,
+          roleCode,
+          authUid
+        }, queryRunner);
+      }
+
+      await queryRunner.commitTransaction();
+
+      return saved;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      return error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   public async findAll (findAllUsersInput: FindAllUsersInput): Promise<User[]> {
