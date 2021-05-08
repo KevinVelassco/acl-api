@@ -6,7 +6,7 @@ import { Company } from '../../companies/entities/company.entity';
 
 @Entity('users')
 @Unique('uq_users_auth_uid', ['authUid'])
-@Unique('uq_users_email', ['email'])
+@Unique('uq_users_email-company', ['email', 'company'])
 @ObjectType()
 export class User {
   /*
