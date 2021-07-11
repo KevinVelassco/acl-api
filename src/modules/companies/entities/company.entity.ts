@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Project } from 'src/modules/projects/entities/project.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 import { Role } from '../../roles/entities/role.entity';
@@ -52,4 +53,8 @@ export class Company {
   @Field(() => [User])
   @OneToMany(() => User, (user: User) => user.company)
   users: User[];
+
+  @Field(() => [Project])
+  @OneToMany(() => Project, (project: Project) => project.company)
+  projects: Project[];
 }
