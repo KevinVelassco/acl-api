@@ -12,6 +12,7 @@ import { UsersModule } from './modules/users/users.module';
 import { CompaniesModule } from './modules/companies/companies.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { AssignedRolesModule } from './modules/assigned-roles/assigned-roles.module';
+import { ProjectsModule } from './modules/projects/projects.module';
 
 import appConfig from './config/app.config';
 import appConfigSchema from './config/app.config.schema';
@@ -51,7 +52,8 @@ const envPath = path.resolve(__dirname, `../.env.${NODE_ENV}`);
     UsersModule,
     CompaniesModule,
     RolesModule,
-    AssignedRolesModule
+    AssignedRolesModule,
+    ProjectsModule
   ],
   controllers: [AppController],
   providers: [AppService]
